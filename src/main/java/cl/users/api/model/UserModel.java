@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.sql.Date;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -13,6 +14,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Entity
 @Table(name = "User", schema = "public")
 @Data
 @AllArgsConstructor
@@ -22,14 +24,12 @@ public class UserModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id", unique = true, nullable = false)
+    @Column(name = "user_id", unique = true, nullable = false, columnDefinition = "BIGINT")
     BigInteger id;
     @Column(nullable = false)
     String name;
     @Column(nullable = false)
     String lastName;
-    @Column(nullable = false)
-    String fullName;
     @Column(unique = true, nullable = false)
     String email;
     @Column(nullable = false)

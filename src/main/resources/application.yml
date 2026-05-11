@@ -1,6 +1,37 @@
 spring:
   application:
     name: users-api
+server:
+  port: 9010
 
+---
+
+spring:
+  profiles:
+    active:
+    - dev
   datasource:
     driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5433/userdb
+    username: ${DB_USER}
+    password: ${DB_PASS}
+  jpa:
+    database: postgresql
+    hibernate:
+      ddl-auto: create-drop
+
+---
+
+spring:
+  profiles:
+    active:
+    - prod
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5433/userdb
+    username: ${DB_USER}
+    password: ${DB_PASS}
+  jpa:
+    database: postgresql
+    hibernate:
+      ddl-auto: update

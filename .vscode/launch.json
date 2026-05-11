@@ -13,10 +13,31 @@
         },
         {
             "type": "java",
-            "name": "ApiApplication",
+            "name": "Run: Dev",
             "request": "launch",
             "mainClass": "cl.users.api.ApiApplication",
-            "projectName": "users-api"
+            "projectName": "users-api",
+            "args": [
+                "--spring.profiles.active=dev"
+            ],
+            "env": {
+                "DB_USER":"postgress",
+                "DB_PASSWORD":"postgress"
+            }
+        },
+        {
+            "type": "java",
+            "name": "Run: Prod",
+            "request": "launch",
+            "mainClass": "cl.users.api.ApiApplication",
+            "projectName": "users-api",
+            "args": [
+                "--spring.profiles.active=prod"
+            ],
+            "env": {
+                "DB_USER":"postgress",
+                "DB_PASSWORD":"postgress"
+            }
         }
     ]
 }
