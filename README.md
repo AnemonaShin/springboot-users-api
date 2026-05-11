@@ -6,8 +6,8 @@ English: CRUD API designed to help control users inside sistems.
 ## Contacto / Contact
 
 Christian Ramirez (AnemonaShin)
-![Email](cramireza1997@gmail.com)
-![Linkedin](www.linkedin.com/in/chramireza)
+[Email](cramireza1997@gmail.com)
+[Linkedin](www.linkedin.com/in/chramireza)
 
 ### Caracteristicas / Features
 
