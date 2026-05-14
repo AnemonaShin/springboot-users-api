@@ -3,12 +3,17 @@ package cl.users.api.service;
 import java.sql.Date;
 import java.time.LocalDateTime;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
+
 import cl.users.api.exception.ServiceException;
 import cl.users.api.model.UserModel;
 import cl.users.api.repository.UserRepository;
 import cl.users.api.request.UserRequest;
 import cl.users.api.response.DefaultResponse;
 
+@Service
 public class UserServiceImpl implements UserService {
 
   UserRepository repository;
@@ -30,6 +35,11 @@ public class UserServiceImpl implements UserService {
         .build());
 
     return DefaultResponse.builder().code("00").message("USER REGISTERED").build();
+  }
+
+  @Override
+  public Page<UserModel> getAllUsers(PageRequest pageRequest) throws ServiceException {
+    return repository.findAll(pageRequest);
   }
 
 }

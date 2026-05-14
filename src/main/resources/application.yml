@@ -3,6 +3,16 @@ spring:
     name: users-api
 server:
   port: 9010
+  servlet:
+    context-path: /users
+
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: "/swagger-ui"
+  api-docs:
+    enabled: true
+    path: "/api-docs"
 
 ---
 
@@ -19,9 +29,6 @@ spring:
     database: postgresql
     hibernate:
       ddl-auto: create-drop
-server:
-  servlet:
-    context-path: /users-dev
 
 ---
 
@@ -38,6 +45,3 @@ spring:
     database: postgresql
     hibernate:
       ddl-auto: update
-server:
-  servlet:
-    context-path: /users-prod
