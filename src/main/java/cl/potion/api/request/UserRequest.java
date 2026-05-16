@@ -1,4 +1,4 @@
-package cl.users.api.request;
+package cl.potion.api.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

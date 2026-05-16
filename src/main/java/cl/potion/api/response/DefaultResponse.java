@@ -1,4 +1,4 @@
-package cl.users.api.response;
+package cl.potion.api.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;

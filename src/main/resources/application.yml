@@ -1,10 +1,10 @@
 spring:
   application:
-    name: users-api
+    name: potion-api
 server:
   port: 9010
   servlet:
-    context-path: /users
+    context-path: /potions
 
 springdoc:
   swagger-ui:
@@ -22,7 +22,7 @@ spring:
     - dev
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5433/userdb
+    url: jdbc:postgresql://localhost:5433/potiondb
     username: ${DB_USER}
     password: ${DB_PASS}
   jpa:
@@ -38,7 +38,7 @@ spring:
     - prod
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5433/userdb
+    url: jdbc:postgresql://localhost:5433/potiondb
     username: ${DB_USER}
     password: ${DB_PASS}
   jpa:

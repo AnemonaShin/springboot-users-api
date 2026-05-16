@@ -1,7 +1,7 @@
-# springboot-users-api
+# potion-api
 
-Spanish: API CRUD para el control usuarios dentro de sistemas.
-English: CRUD API designed to help control users inside sistems.
+Spanish: API CRUD para el control de mini juego de pociones.
+English: CRUD API designed for the usage inside the minigame potions.
 
 ## Contacto / Contact
 
@@ -17,7 +17,7 @@ Christian Ramirez (AnemonaShin)
   - Busqueda (Paginada)
   - Registro.
   - Actualizacion.
-  - Eliminacion (Desvinculacion)
+  - Eliminacion
 - Dockerisacion.
 
 #### Features (in English)
@@ -26,7 +26,7 @@ Christian Ramirez (AnemonaShin)
   - Search (Paginated)
   - Register
   - Update
-  - Erase (Delist)
+  - Erase
 - Dockerisation.
 
 ### Creado para / Created for

@@ -8,11 +8,11 @@
 		<version>4.0.6</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>cl.users</groupId>
-	<artifactId>users-api</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>api</name>
-	<description/>
+	<groupId>cl.potion</groupId>
+	<artifactId>potion-api</artifactId>
+	<version>1.0.0</version>
+	<name>Potion API</name>
+	<description>API used for mini-games pourposes</description>
 	<url/>
 	<licenses>
 		<license/>

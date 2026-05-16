@@ -1,13 +1,13 @@
-package cl.users.api.controller;
+package cl.potion.api.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import cl.users.api.exception.ServiceException;
-import cl.users.api.model.UserModel;
-import cl.users.api.request.UserRequest;
-import cl.users.api.response.DefaultResponse;
-import cl.users.api.service.UserService;
+import cl.potion.api.exception.ServiceException;
+import cl.potion.api.model.UserModel;
+import cl.potion.api.request.UserRequest;
+import cl.potion.api.response.DefaultResponse;
+import cl.potion.api.service.UserService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 

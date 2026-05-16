@@ -1,4 +1,4 @@
-package cl.users.api.model;
+package cl.potion.api.model;
 
 import java.math.BigInteger;
 import java.sql.Date;

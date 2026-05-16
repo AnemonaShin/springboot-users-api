@@ -1,4 +1,4 @@
-package cl.users.api.exception;
+package cl.potion.api.exception;
 
 import java.time.LocalDateTime;
 
