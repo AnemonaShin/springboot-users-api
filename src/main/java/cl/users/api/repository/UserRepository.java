@@ -8,4 +8,6 @@ import cl.users.api.model.UserModel;
 @Repository
 public interface UserRepository extends JpaRepository<UserModel, BigInteger> {
 
+    UserModel getByEmail(String email);
+
 }

@@ -16,4 +16,6 @@ public interface UserService {
 
     public Page<UserModel> getAllUsers(PageRequest pageRequest) throws ServiceException;
 
+    public DefaultResponse getUserByEmail(String email) throws ServiceException;
+
 }

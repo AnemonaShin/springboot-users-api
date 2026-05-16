@@ -17,7 +17,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -50,17 +52,33 @@ public class UserApiController {
     }
   }
 
-  @GetMapping("/search/{user_name}")
-  public String getUserByUserName(
-      @PathVariable(name = "user_name", required = true) String userName) {
-    return userName;
+  @GetMapping("/search/{user_email}")
+  public ResponseEntity<Object> getUserByEmail(
+      @PathVariable(name = "user_email", required = true) String email) throws ServiceException {
+
+    DefaultResponse response = userService.getUserByEmail(email);
+    return ResponseEntity.ok().body(response);
   }
 
   @GetMapping("/list_users")
   public Page<UserModel> getAllUsers(
-      @RequestParam int page,
-      @RequestParam int size) throws ServiceException {
+      @RequestParam(value = "page", defaultValue = "0") int page,
+      @RequestParam(value = "size", defaultValue = "10") int size) throws ServiceException {
     return userService.getAllUsers(PageRequest.of(page, size));
+  }
+
+  @DeleteMapping("/deactivate_user/{user_id}")
+  public ResponseEntity<Object> deactivateUser(
+      @PathVariable(name = "user_id") int userId) {
+    return null;
+  }
+
+  @PatchMapping("/update_user/{user_id}")
+  public String updateUser(
+      @PathVariable(name = "user_id") String userId,
+      @RequestBody UserRequest body) {
+
+    return body.toString();
   }
 
 }
