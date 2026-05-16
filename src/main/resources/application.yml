@@ -1,6 +1,47 @@
 spring:
   application:
-    name: users-api
+    name: potion-api
+server:
+  port: 9010
+  servlet:
+    context-path: /potions
 
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: "/swagger-ui"
+  api-docs:
+    enabled: true
+    path: "/api-docs"
+
+---
+
+spring:
+  profiles:
+    active:
+    - dev
   datasource:
     driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5433/potiondb
+    username: ${DB_USER}
+    password: ${DB_PASS}
+  jpa:
+    database: postgresql
+    hibernate:
+      ddl-auto: create-drop
+
+---
+
+spring:
+  profiles:
+    active:
+    - prod
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5433/potiondb
+    username: ${DB_USER}
+    password: ${DB_PASS}
+  jpa:
+    database: postgresql
+    hibernate:
+      ddl-auto: update
