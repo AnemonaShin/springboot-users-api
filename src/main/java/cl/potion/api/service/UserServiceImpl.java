@@ -7,9 +7,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import cl.potion.api.dto.UserDto;
+import cl.potion.api.entity.UserEntity;
 import cl.potion.api.exception.ServiceException;
-import cl.potion.api.model.UserModel;
-import cl.potion.api.repository.UserRepository;
 import cl.potion.api.request.UserRequest;
 import cl.potion.api.response.DefaultResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -18,20 +18,19 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class UserServiceImpl implements UserService {
 
-  UserRepository repository;
+  UserDto repository;
 
-  public UserServiceImpl(UserRepository repository) {
+  public UserServiceImpl(UserDto repository) {
     this.repository = repository;
   }
 
   // TODO: corregir errores.
   public DefaultResponse registerUser(UserRequest body) throws ServiceException {
 
-    repository.save(UserModel.builder()
-        .name(body.getName())
-        .lastName(body.getLastName())
+    repository.save(UserEntity.builder()
+        .username(body.getName())
+        .password(body.getLastName())
         .email(body.getEmail())
-        .address(body.getAddress())
         .createAt(Date.valueOf(LocalDateTime.now().toLocalDate()))
         .updatedAt(Date.valueOf(LocalDateTime.now().toLocalDate()))
         .active(true)
@@ -41,15 +40,15 @@ public class UserServiceImpl implements UserService {
   }
 
   // TODO: corregir errores.
-  public Page<UserModel> getAllUsers(PageRequest pageRequest) throws ServiceException {
+  public Page<UserEntity> getAllUsers(PageRequest pageRequest) throws ServiceException {
     return repository.findAll(pageRequest);
   }
 
   // TODO: corregir errores.
-  public DefaultResponse getUserByEmail(String email) throws ServiceException {
+  public DefaultResponse searchByUsername(String username) throws ServiceException {
 
     try {
-      var userSearched = repository.getByEmail(email);
+      var userSearched = repository.searchByUsername(username);
 
       if (userSearched == null) {
         throw new ServiceException("400", "ERROR");

@@ -1,7 +1,7 @@
-package cl.potion.api.model;
+package cl.potion.api.entity;
 
 import java.math.BigInteger;
-import java.sql.Date;
+import java.util.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,25 +15,23 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "User", schema = "public")
+@Table(name = "User")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserModel {
+public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id", unique = true, nullable = false, columnDefinition = "BIGINT")
     BigInteger id;
+    @Column(unique = true, nullable = false)
+    String username;
     @Column(nullable = false)
-    String name;
-    @Column(nullable = false)
-    String lastName;
+    String password;
     @Column(unique = true, nullable = false)
     String email;
-    @Column(nullable = false)
-    String address;
     @Column(nullable = false)
     Date createAt;
     @Column(nullable = false)

@@ -3,8 +3,8 @@ package cl.potion.api.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import cl.potion.api.entity.UserEntity;
 import cl.potion.api.exception.ServiceException;
-import cl.potion.api.model.UserModel;
 import cl.potion.api.request.UserRequest;
 import cl.potion.api.response.DefaultResponse;
 import cl.potion.api.service.UserService;
@@ -30,17 +30,17 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 @RestController
 @RequestMapping(path = "/v1")
-public class UserApiController {
+public class UserController {
 
   UserService userService;
 
-  public UserApiController(UserService userService) {
+  public UserController(UserService userService) {
     this.userService = userService;
   }
 
   @Tag(name = "register", description = "Endpoint designed to register a new User.")
   @ApiResponse(description = "Respond custom response object.")
-  @PostMapping(path = "/register", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  @PostMapping(path = "/user", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Object> registerUser(
       @RequestBody UserRequest body)
       throws ServiceException {
@@ -52,28 +52,28 @@ public class UserApiController {
     }
   }
 
-  @GetMapping("/search/{user_email}")
-  public ResponseEntity<Object> getUserByEmail(
-      @PathVariable(name = "user_email", required = true) String email) throws ServiceException {
+  @GetMapping("/users/{username}")
+  public ResponseEntity<Object> searchByUsername(
+      @PathVariable(name = "username", required = true) String email) throws ServiceException {
 
-    DefaultResponse response = userService.getUserByEmail(email);
+    DefaultResponse response = userService.searchByUsername(email);
     return ResponseEntity.ok().body(response);
   }
 
-  @GetMapping("/list_users")
-  public Page<UserModel> getAllUsers(
+  @GetMapping("/users")
+  public Page<UserEntity> getAllUsers(
       @RequestParam(value = "page", defaultValue = "0") int page,
       @RequestParam(value = "size", defaultValue = "10") int size) throws ServiceException {
     return userService.getAllUsers(PageRequest.of(page, size));
   }
 
-  @DeleteMapping("/deactivate_user/{user_id}")
+  @DeleteMapping("/users/{user_id}")
   public ResponseEntity<Object> deactivateUser(
       @PathVariable(name = "user_id") int userId) {
     return null;
   }
 
-  @PatchMapping("/update_user/{user_id}")
+  @PatchMapping("/users/{user_id}")
   public String updateUser(
       @PathVariable(name = "user_id") String userId,
       @RequestBody UserRequest body) {

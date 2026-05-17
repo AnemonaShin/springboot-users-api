@@ -1,0 +1,40 @@
+@startuml Potion Framework
+class User {
+    +username: String
+    +password: String
+    +email: String
+    +active: Boolean
+}
+
+class Inventory {
+    +space: int
+}
+
+class Item {
+  +id of item: int
+  +quantity: int
+}
+
+class Potion {
+  +name: String
+  +type: String
+}
+
+class Ingredient {
+  +name: String
+  +type: String
+}
+
+class Recipe {
+  +description: String
+}
+
+User "1" --> "1" Inventory : Has an
+User "1" --> "*" Recipe : Discovers
+Inventory "1" --> "*" Item: Contains
+Item "*" --> "1" Potion : Contains
+Item "*" --> "1" Ingredient : Contains
+Recipe "1" --> "1" Potion : Creates
+Recipe "1" --> "*" Ingredient : Uses
+
+@enduml
