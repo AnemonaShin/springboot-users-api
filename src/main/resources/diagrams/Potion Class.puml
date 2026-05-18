@@ -1,4 +1,4 @@
-@startuml Potion Framework
+@startuml Potion Class
 class User {
     +username: String
     +password: String

@@ -15,8 +15,8 @@ import lombok.NoArgsConstructor;
 @JsonInclude(value = Include.NON_NULL)
 public class DefaultResponse {
 
-    String code;
-    String message;
-    Object response;
+  String code;
+  String message;
+  Object response;
 
 }

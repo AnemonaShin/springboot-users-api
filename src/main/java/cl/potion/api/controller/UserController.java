@@ -19,9 +19,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PutMapping;
 
 /**
  * @author AnemonaShin (Christian Ramirez) - cramireza1997@gmail.com
@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @since 10-05-2026
  */
 @RestController
-@RequestMapping(path = "/v1")
+@RequestMapping(path = "/v1/user")
 public class UserController {
 
   UserService userService;
@@ -38,9 +38,9 @@ public class UserController {
     this.userService = userService;
   }
 
-  @Tag(name = "register", description = "Endpoint designed to register a new User.")
-  @ApiResponse(description = "Respond custom response object.")
-  @PostMapping(path = "/user", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  @Tag(name = "register", description = "Endpoints designed to registers.")
+  @ApiResponse(description = "Responds a custom response object.")
+  @PostMapping(path = "/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Object> registerUser(
       @RequestBody UserRequest body)
       throws ServiceException {
@@ -52,28 +52,36 @@ public class UserController {
     }
   }
 
-  @GetMapping("/users/{username}")
+  @Tag(name = "search", description = "Endpoints designed to searchs.")
+  @GetMapping(path = "/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
+  @ApiResponse(description = "Responds a custom response object with user searched data.")
   public ResponseEntity<Object> searchByUsername(
-      @PathVariable(name = "username", required = true) String email) throws ServiceException {
+      @PathVariable(name = "username", required = true) String username) throws ServiceException {
 
-    DefaultResponse response = userService.searchByUsername(email);
+    DefaultResponse response = userService.searchByUsername(username);
     return ResponseEntity.ok().body(response);
   }
 
-  @GetMapping("/users")
+  @Tag(name = "search", description = "Endpoints designed to searchs.")
+  @GetMapping(path = "/", produces = MediaType.APPLICATION_JSON_VALUE)
+  @ApiResponse(description = "Responds a paginated object with users data.")
   public Page<UserEntity> getAllUsers(
       @RequestParam(value = "page", defaultValue = "0") int page,
       @RequestParam(value = "size", defaultValue = "10") int size) throws ServiceException {
     return userService.getAllUsers(PageRequest.of(page, size));
   }
 
-  @DeleteMapping("/users/{user_id}")
+  @Tag(name = "delete", description = "Endpoints designed to delete or deactivate.")
+  @DeleteMapping(path = "/{user_id}", produces = MediaType.APPLICATION_JSON_VALUE)
+  @ApiResponse(description = "Responds a custom response object.")
   public ResponseEntity<Object> deactivateUser(
       @PathVariable(name = "user_id") int userId) {
     return null;
   }
 
-  @PatchMapping("/users/{user_id}")
+  @Tag(name = "update", description = "Endpoints designed to update data.")
+  @PutMapping(path = "/{user_id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  @ApiResponse(description = "Responds a custom response object with users data modified.")
   public String updateUser(
       @PathVariable(name = "user_id") String userId,
       @RequestBody UserRequest body) {
