@@ -1,7 +1,7 @@
 package cl.potion.api.entity;
 
 import java.math.BigInteger;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -36,9 +36,9 @@ public class UserEntity {
   @Column(unique = true, nullable = false)
   String email;
   @Column(nullable = false)
-  Date createAt;
+  LocalDateTime createAt;
   @Column(nullable = false)
-  Date updatedAt;
+  LocalDateTime updatedAt;
   @Column(nullable = false)
   Boolean active;
 

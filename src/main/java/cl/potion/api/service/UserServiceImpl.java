@@ -1,14 +1,16 @@
 package cl.potion.api.service;
 
-import java.sql.Date;
+import java.math.BigInteger;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import cl.potion.api.entity.UserEntity;
+import cl.potion.api.exception.ExceptionList;
 import cl.potion.api.exception.ServiceException;
 import cl.potion.api.repository.UserRepository;
 import cl.potion.api.request.UserRequest;
@@ -26,6 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class UserServiceImpl implements UserService {
+  private final LocalDateTime localNowCl = LocalDateTime.now(ZoneId.of("America/Santiago"));
 
   UserRepository repository;
 
@@ -33,44 +36,145 @@ public class UserServiceImpl implements UserService {
     this.repository = repository;
   }
 
-  // TODO: corregir errores.
   public DefaultResponse registerUser(UserRequest body) throws ServiceException {
-
-    repository.save(UserEntity.builder()
-        .username(body.getUsername())
-        .password(PasswordUtil.passwordEncrypt(body.getPassword()))
-        .email(body.getEmail())
-        .createAt(Date.valueOf(LocalDateTime.now().toLocalDate()))
-        .updatedAt(Date.valueOf(LocalDateTime.now().toLocalDate()))
-        .active(true)
-        .build());
-
-    return DefaultResponse.builder().code("00").message("USER REGISTERED").build();
-  }
-
-  // TODO: corregir errores.
-  public Page<UserEntity> getAllUsers(PageRequest pageRequest) throws ServiceException {
-    return repository.findAll(pageRequest);
-  }
-
-  // TODO: corregir errores.
-  public DefaultResponse searchByUsername(String username) throws ServiceException {
-
     try {
-      UserEntity userSearched;
-      try {
-        userSearched = repository.searchByUsername(username);
-      } catch (JpaObjectRetrievalFailureException jEx) {
-        throw new ServiceException("400", "ERROR");
+      repository.saveAndFlush(UserEntity.builder()
+          .username(body.getUsername())
+          .password(PasswordUtil.passwordEncrypt(body.getPassword()))
+          .email(body.getEmail())
+          .createAt(
+              localNowCl)
+          .updatedAt(
+              localNowCl)
+          .active(true)
+          .build());
+      return DefaultResponse.builder().code("200").message("USER REGISTERED").build();
+    } catch (Exception ex) {
+      log.error("Exception inside registerUser, ex: {}", ex);
+      throw new ServiceException(HttpStatus.INTERNAL_SERVER_ERROR, "500", ex.getMessage());
+    }
+  }
+
+  public Page<UserEntity> getAllUsers(PageRequest pageRequest) throws ServiceException {
+    try {
+      return repository.searchAllByActiveTrue(pageRequest);
+    } catch (Exception ex) {
+      log.error("Exception inside getAllUsers, ex: {}", ex);
+      throw new ServiceException(HttpStatus.INTERNAL_SERVER_ERROR, "500", ex.getMessage());
+    }
+  }
+
+  public DefaultResponse searchByUsername(String username) throws ServiceException {
+    try {
+      var userSearched = repository.searchByUsername(username);
+
+      if (userSearched == null) {
+        throw new ServiceException(ExceptionList.UNFD);
       }
-      return DefaultResponse.builder().code("00").message("USER SEARCHED").response(
+
+      if (Boolean.FALSE == userSearched.getActive()) {
+        throw new ServiceException(ExceptionList.USDCS);
+      }
+
+      return DefaultResponse.builder().code("200").message("USER SEARCHED").response(
           userSearched)
           .build();
-    } catch (ServiceException ex) {
-      log.error("Error inside getUserByUsername, ex: {}", ex);
-      throw new ServiceException(ex.getLocalizedMessage(), ex.getMessage());
+    } catch (ServiceException excp) {
+      log.error("ServiceException inside searchByUsername, ex: {}", excp);
+      throw new ServiceException(excp.getHttpStatus(), excp.getCode(), excp.getMessage());
+    } catch (Exception ex) {
+      log.error("Exception inside searchByUsername, ex: {}", ex);
+      throw new ServiceException(HttpStatus.INTERNAL_SERVER_ERROR, "500", ex.getMessage());
     }
 
+  }
+
+  public DefaultResponse deactivateUser(BigInteger userId) throws ServiceException {
+    try {
+
+      var user = repository.searchById(userId);
+
+      if (user == null) {
+        throw new ServiceException(ExceptionList.UNFD);
+      }
+
+      if (Boolean.FALSE == user.getActive()) {
+        throw new ServiceException(ExceptionList.USAD);
+      }
+
+      user.setActive(false);
+      user.setUpdatedAt(localNowCl);
+
+      repository.saveAndFlush(user);
+
+      return DefaultResponse.builder().code("200").message("USER DEACTIVATED").build();
+
+    } catch (ServiceException excp) {
+      log.error("ServiceException inside deactivateUser, ex: {}", excp);
+      throw new ServiceException(excp.getHttpStatus(), excp.getCode(), excp.getMessage());
+    } catch (Exception ex) {
+      log.error("Exception inside deactivateUser, ex: {}", ex);
+      throw new ServiceException(HttpStatus.INTERNAL_SERVER_ERROR, "500", ex.getMessage());
+    }
+
+  }
+
+  public DefaultResponse activateUser(BigInteger userId) throws ServiceException {
+    try {
+      var user = repository.searchById(userId);
+
+      if (user == null) {
+        throw new ServiceException(ExceptionList.UNFD);
+      }
+
+      if (Boolean.TRUE == user.getActive()) {
+        throw new ServiceException(ExceptionList.USAA);
+      }
+
+      user.setActive(true);
+      user.setUpdatedAt(localNowCl);
+
+      repository.saveAndFlush(user);
+
+      return DefaultResponse.builder().code("200").message("USER ACTIVATED").build();
+    } catch (ServiceException excp) {
+      log.error("Exception inside activateUser, ex: {}", excp);
+      throw new ServiceException(excp.getHttpStatus(), excp.getCode(), excp.getMessage());
+    } catch (Exception ex) {
+      log.error("Exception inside activateUser, ex: {}", ex);
+      throw new ServiceException(HttpStatus.INTERNAL_SERVER_ERROR, "500", ex.getMessage());
+    }
+
+  }
+
+  public DefaultResponse updateUser(BigInteger userId, UserRequest body) throws ServiceException {
+    try {
+      var user = repository.searchById(userId);
+
+      if (user == null) {
+        throw new ServiceException(ExceptionList.UNFD);
+      }
+
+      if (Boolean.FALSE == user.getActive()) {
+        throw new ServiceException(ExceptionList.USDCU);
+      }
+
+      user.setUsername(body.getUsername() != null ? body.getUsername() : user.getUsername());
+      user.setPassword(
+          body.getPassword() != null ? PasswordUtil.passwordEncrypt(body.getPassword()) : user.getPassword());
+      user.setEmail(body.getEmail() != null ? body.getEmail() : user.getEmail());
+      user.setUpdatedAt(localNowCl);
+
+      repository.saveAndFlush(user);
+
+      return DefaultResponse.builder().code("200").message("USER UPDATED").build();
+    } catch (ServiceException excp) {
+      log.error("Exception inside updateUser, ex: {}", excp);
+      throw new ServiceException(excp.getHttpStatus(), excp.getCode(), excp.getMessage());
+    } catch (Exception ex) {
+      log.error("Exception inside updateUser, ex: {}", ex);
+      throw new ServiceException(HttpStatus.INTERNAL_SERVER_ERROR, "500", ex.getMessage());
+    }
   }
 
 }
